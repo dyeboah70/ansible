@@ -1,0 +1,12 @@
+---
+
+- hosts: webserver
+  become: true
+  roles:
+    - packages
+    
+
+- hosts: ec2
+  become: true
+  roles:
+    - ec2

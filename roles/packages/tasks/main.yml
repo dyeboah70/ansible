@@ -1,0 +1,79 @@
+---
+# tasks file for packages
+
+- name: Install python-virtualenv
+  tags: python,venv
+  ansible.builtin.pip:
+    name: virtualenv
+
+- name: Create virtual environment
+  tags: python,venv
+  command: virtualenv -p /usr/bin/python3.9 ~/my_app_venv
+
+- name: Install Ansible in the virtual environment
+  tags: python,venv
+  pip:
+    virtualenv: ~/my_app_venv
+    name: ansible
+
+- name: Install boto3 in the virtual environment
+  tags: boto,venv
+  ansible.builtin.pip:
+    virtualenv: ~/my_app_venv
+    name: boto3
+
+- name: Install botocore in the virtual environment
+  tags: boto,venv
+  ansible.builtin.pip:
+    virtualenv: ~/my_app_venv
+    name: botocore 
+
+- name: Check if conflicting Docker GPG key exists
+  tags: docker
+  stat:
+    path: /usr/share/keyrings/docker-archive-keyring.gpg
+  register: conflicting_key_stat
+  become: true
+
+- name: Remove conflicting Docker GPG key
+  tags: docker
+  file:
+    path: /usr/share/keyrings/docker-archive-keyring.gpg
+    state: absent
+  when: conflicting_key_stat.stat.exists == true
+  become: true
+
+- name: Check if conflicting Docker repository entry exists
+  tags: docker
+  stat:
+    path: /etc/apt/sources.list.d/docker.list
+  register: conflicting_repo_stat
+  become: true 
+
+- name: Update
+  tags: update
+  apt: update_cache=yes   
+
+- name: Installing Redis
+  tags: redis
+  apt: name=redis state=latest
+
+  notify:
+    - start redis.service 
+
+- name: start Redis Server
+  tags: redis
+  service: name=redis state=started enabled=yes
+
+- name: Install Nginx
+  tags: nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: Start Nginx
+  tags: nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes

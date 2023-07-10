@@ -1,0 +1,4 @@
+---
+  
+- name: SSH into EC2 instance
+  ping:
