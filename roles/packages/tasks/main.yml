@@ -28,6 +28,13 @@
     virtualenv: ~/my_app_venv
     name: botocore 
 
+
+- name: Install python3-apt
+  apt:
+    name: python3-apt
+    state: present
+
+
 - name: Check if conflicting Docker GPG key exists
   tags: docker
   stat:
