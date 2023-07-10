@@ -1,6 +1,11 @@
 ---
 # tasks file for packages
 
+- name: Install python3-apt
+  apt:
+    name: python3-apt
+    state: present
+
 - name: Install python-virtualenv
   tags: python,venv
   ansible.builtin.pip:
@@ -8,32 +13,25 @@
 
 - name: Create virtual environment
   tags: python,venv
-  command: virtualenv -p /usr/bin/python3.9 ~/my_app_venv
+  command: virtualenv -p /usr/bin/python3.9 /home/admin/my_app_venv
 
 - name: Install Ansible in the virtual environment
   tags: python,venv
   pip:
-    virtualenv: ~/my_app_venv
+    virtualenv: /home/admin/my_app_venv
     name: ansible
 
 - name: Install boto3 in the virtual environment
   tags: boto,venv
   ansible.builtin.pip:
-    virtualenv: ~/my_app_venv
+    virtualenv: /home/admin/my_app_venv
     name: boto3
 
 - name: Install botocore in the virtual environment
   tags: boto,venv
   ansible.builtin.pip:
-    virtualenv: ~/my_app_venv
+    virtualenv: /home/admin/my_app_venv
     name: botocore 
-
-
-- name: Install python3-apt
-  apt:
-    name: python3-apt
-    state: present
-
 
 - name: Check if conflicting Docker GPG key exists
   tags: docker
@@ -65,8 +63,8 @@
   tags: redis
   apt: name=redis state=latest
 
-  notify:
-    - start redis.service 
+  # notify:
+  #   - start redis.service 
 
 - name: start Redis Server
   tags: redis
