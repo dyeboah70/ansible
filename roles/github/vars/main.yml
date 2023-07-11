@@ -1,0 +1,8 @@
+---
+# vars file for github
+  project_dir: /opt/mesika/enterprise
+  requirements_file: requirements.txt
+  branch_name: master
+  virtualenv_dir: /home/admin/my_app_venv
+  key_file: /home/admin/.ssh/mesika
+

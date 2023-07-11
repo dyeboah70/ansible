@@ -14,6 +14,7 @@
 - name: Create virtual environment
   tags: python,venv
   command: virtualenv -p /usr/bin/python3.9 /home/admin/my_app_venv
+  notify: send_email
 
 - name: Install Ansible in the virtual environment
   tags: python,venv
@@ -55,16 +56,11 @@
   register: conflicting_repo_stat
   become: true 
 
-- name: Update
-  tags: update
-  apt: update_cache=yes   
 
 - name: Installing Redis
   tags: redis
   apt: name=redis state=latest
 
-  # notify:
-  #   - start redis.service 
 
 - name: start Redis Server
   tags: redis

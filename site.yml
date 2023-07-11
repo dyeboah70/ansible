@@ -9,5 +9,7 @@
 - hosts: ec2
   become: true
   roles:
-    - ec2
-    - packages
+    # - ec2
+    # - packages
+    # - github
+    - rabbitmq

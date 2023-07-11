@@ -1,0 +1,13 @@
+---
+# vars file for rabbitmq
+
+
+rabbitmq_server_name: mesika-enterprise
+
+rabbitmq_admin_user: mesika
+rabbitmq_admin_password: "@Mesika70"
+
+rabbitmq_application_vhost: mesika-business
+rabbitmq_application_user: mesika
+rabbitmq_application_password: "@Mesika70"
+update_apt_cache: true

@@ -2,3 +2,11 @@
   
 - name: SSH into EC2 instance
   ping:
+
+- name: Update apt repo and cache on Debian servers
+  tags: ec2
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Upgrade all packages on Debian servers
+  tags: ec2
+  apt: upgrade=dist force_apt_get=yes

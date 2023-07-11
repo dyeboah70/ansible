@@ -1,0 +1,46 @@
+---
+# tasks file for rabbitmq
+
+
+- name: Remove malformed RabbitMQ repository file
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/dl_cloudsmith_io_public_rabbitmq_rabbitmq_server_debbullseye.list
+    state: absent
+
+
+- name: Add the RabbitMQ Erlang signing key to the apt trusted keys
+  ansible.builtin.apt_key: url=https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/gpg.E495BB49CC4BBE5B.key
+           state=present
+
+- name: Add the RabbitMQ Erlang repository to the apt sources list
+  ansible.builtin.apt_repository: repo='deb https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/deb/ubuntu {{ ansible_distribution_release }} main'
+                  update_cache={{ update_apt_cache }}
+                  state=present
+
+
+- name: Install RabbitMQ server
+  ansible.builtin.apt:
+    # update_cache: "{{ update_apt_cache }}"
+    state: present
+    name:
+      - rabbitmq-server
+  tags:
+    - packages
+
+- name: Make sure rabbitmq-server is enabled and running
+  ansible.builtin.service:
+    name: rabbitmq-server
+    state: started
+    enabled: true
+    # TODO: This is likely due to a bug in Ansible.
+    # Remove this line in the future.
+    # See https://github.com/ansible/ansible/issues/75005
+    use: sysvinit
+
+- name: Enable the RabbitMQ Management Console
+  community.rabbitmq.rabbitmq_plugin: names=rabbitmq_management state=enabled
+  notify: restart rabbitmq-server
+
+- ansible.builtin.import_tasks: setup_vhosts.yml
+
+- ansible.builtin.import_tasks: setup_users.yml

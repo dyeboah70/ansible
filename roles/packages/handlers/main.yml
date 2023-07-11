@@ -1,2 +1,16 @@
 ---
 # handlers file for packages
+
+
+
+- name: send_email
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "{{username}}"
+    password: "{{password}}"
+    to: "{{to}}"
+    subject: "Ansible Email Notification"
+    body: Instance deploy has been successfully provisioned.
+    secure: starttls
+  delegate_to: localhost

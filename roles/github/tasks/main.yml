@@ -1,0 +1,37 @@
+---
+# tasks file for github
+
+- name: add github ssh key
+  become: true
+  copy: >
+    src=/home/backend/.ssh/mesika
+    dest=/home/admin/.ssh/mesika
+    owner=root
+    group=root
+    mode=0600
+
+- name: configure ssh to use ansible key for github.com
+  become: true
+  template: >
+    src=ssh_config.j2
+    dest=/home/admin/.ssh/config
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup the Git repo
+  become: true
+  tags: git
+  ansible.builtin.git:
+    repo: git@github.com:mesika-gh/enterprise_application_api.git
+    dest: "{{ project_dir }}"
+    version: "{{ branch_name }}"
+    key_file: "{{key_file}}"
+
+
+- name: Activate virtual environment and Install Python requirements
+  tags: git
+  pip:
+    virtualenv: "{{ virtualenv_dir }}"
+    requirements: "{{ project_dir }}/{{ requirements_file }}"
+
