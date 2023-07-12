@@ -11,5 +11,8 @@
   roles:
     # - ec2
     # - packages
-    # - github
-    - rabbitmq
+    # - rabbitmq
+    # - nginx
+    # - db
+    # - web
+    - certbot

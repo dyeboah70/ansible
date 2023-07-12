@@ -1,0 +1,16 @@
+---
+
+project_dir: /opt/mesika/enterprise
+requirements_file: "{{project_dir}}/requirements.txt"
+branch_name: master
+virtualenv_dir: /home/admin/my_app_venv
+key_file: /home/admin/.ssh/mesika
+app_name: enterprise_application_api
+django_settings_file: /opt/mesika/enterprise/enterprise_application_api/enterprise_application_api/settings.py
+django_secret_key: qhia#h#3niq3v0%op+df4wk46e*td%(xgj+g_eyr4@*^p3rmnn
+
+db_name: enterprise
+db_user: enterprise
+db_password: "@Mesika70"
+broker_url: "redis://127.0.0.1:6379"
+pip_use_upgrade_flag: false

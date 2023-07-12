@@ -34,27 +34,27 @@
     virtualenv: /home/admin/my_app_venv
     name: botocore 
 
-- name: Check if conflicting Docker GPG key exists
-  tags: docker
-  stat:
-    path: /usr/share/keyrings/docker-archive-keyring.gpg
-  register: conflicting_key_stat
-  become: true
+# - name: Check if conflicting Docker GPG key exists
+#   tags: docker
+#   stat:
+#     path: /usr/share/keyrings/docker-archive-keyring.gpg
+#   register: conflicting_key_stat
+#   become: true
 
-- name: Remove conflicting Docker GPG key
-  tags: docker
-  file:
-    path: /usr/share/keyrings/docker-archive-keyring.gpg
-    state: absent
-  when: conflicting_key_stat.stat.exists == true
-  become: true
+# - name: Remove conflicting Docker GPG key
+#   tags: docker
+#   file:
+#     path: /usr/share/keyrings/docker-archive-keyring.gpg
+#     state: absent
+#   when: conflicting_key_stat.stat.exists == true
+#   become: true
 
-- name: Check if conflicting Docker repository entry exists
-  tags: docker
-  stat:
-    path: /etc/apt/sources.list.d/docker.list
-  register: conflicting_repo_stat
-  become: true 
+# - name: Check if conflicting Docker repository entry exists
+#   tags: docker
+#   stat:
+#     path: /etc/apt/sources.list.d/docker.list
+#   register: conflicting_repo_stat
+#   become: true 
 
 
 - name: Installing Redis
@@ -66,21 +66,4 @@
   tags: redis
   service: name=redis state=started enabled=yes
 
-- name: Install Nginx
-  tags: nginx
-  apt:
-    name: nginx
-    state: latest
 
-- name: Start Nginx
-  tags: nginx
-  service:
-    name: nginx
-    state: started
-    enabled: yes
-
-- name: Install uwsgi
-  tags: uwsgi
-  apt:
-    name: uwsgi
-    state: present

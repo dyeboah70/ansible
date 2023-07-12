@@ -1,0 +1,21 @@
+---
+
+- name: Install uWSGI
+  apt:
+    name: uwsgi
+    state: present
+  become: true
+
+- name: Configure uWSGI
+  template:
+    src=uwsgi.ini.j2
+    dest=/etc/uwsgi/uwsgi.ini
+  become: true
+
+
+- name: Start uWSGI service
+  service:
+    name: uwsgi
+    state: started
+    enabled: true
+  become: true

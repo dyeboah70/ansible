@@ -1,0 +1,16 @@
+[uwsgi]
+http-socket = :9000
+pythonpath = /home/admin/my_app_venv/bin/python3
+chdir = {{ project_dir }}
+module = enterprise_application_api.wsgi:application
+master = true
+processes = 4
+vacuum = true
+buffer-size = 65535
+chmod-socket = 777
+post-buffering = 2
+harakiri = 300
+env = PYTHONPATH=/home/admin/my_app_venv/lib/python3.9/site-packages
+executable = /home/admin/my_app_venv/bin/python3
+limit-as = 256
+touch-reload = {{ project_dir }}/enterprise_application_api/settings.py

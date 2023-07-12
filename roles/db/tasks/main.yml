@@ -1,0 +1,79 @@
+---
+# tasks file for db
+
+
+
+- name: Ensure locale is available
+  community.general.locale_gen: name=en_US.UTF-8
+
+- name: Install PostgreSQL
+  ansible.builtin.apt:
+    state: present
+    name:
+      - postgresql-13
+      - postgresql-contrib
+      - postgresql-client
+      - "{{ base_python_package }}-psycopg2"
+  tags: packages
+
+- name: Create the database with details in vars
+  become: true
+  postgresql_db:
+    name: "{{ db_name }}"
+    template: 'template0'
+    state: present
+
+- name: Create PostgreSQL user
+  become: true
+  postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    encrypted: yes
+
+- name: Ensure the PostgreSQL service is running
+  ansible.builtin.service:
+    name: postgresql
+    state: started
+    enabled: true
+    # TODO: This is likely due to a bug in Ansible.
+    # Remove this line in the future.
+    # See https://github.com/ansible/ansible/issues/75005
+    use: sysvinit
+
+# - name: Ensure database is created
+#   become: true
+#   become_user: postgres
+#   community.postgresql.postgresql_db:
+#     name: "{{ db_name }}"
+#     encoding: UTF-8
+#     lc_collate: en_US.UTF-8
+#     lc_ctype: en_US.UTF-8
+#     template: template0
+#     state: present
+
+# - name: Ensure user has access to the database
+#   become: true
+#   become_user: postgres
+#   community.postgresql.postgresql_user: db={{ db_name }}
+#                    name={{ db_user }}
+#                    password={{ db_password }}
+#                    encrypted=yes
+#                    state=present
+
+# If objs is omitted for type "database", it defaults to the database
+# to which the connection is established
+# - name: Grant database privileges to the user.
+#   become: true
+#   become_user: postgres
+#   community.postgresql.postgresql_privs:
+#     db: "{{ db_name }}"
+#     privs: ALL
+#     type: database
+#     role: "{{ db_user }}"
+
+# - name: Ensure user does not have unnecessary privileges
+#   become: true
+#   become_user: postgres
+#   community.postgresql.postgresql_user: name={{ db_user }}
+#                    role_attr_flags=NOSUPERUSER,NOCREATEDB
+#                    state=present

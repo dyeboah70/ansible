@@ -1,0 +1,16 @@
+---
+# tasks file for packages
+
+- name: Install python3-apt
+  apt:
+    name: python3-apt
+    state: present
+
+- name: Install python-virtualenv
+  tags: python,venv
+  ansible.builtin.pip:
+    name: virtualenv
+
+- name: Create virtual environment
+  tags: python,venv
+  command: virtualenv -p /usr/bin/python3.9 /home/admin/my_app_venv

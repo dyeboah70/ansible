@@ -1,0 +1,4 @@
+---
+# vars file for certbot
+update_apt_cache: true
+inventory_hostname: ec2-34-214-162-243.us-west-2.compute.amazonaws.com
